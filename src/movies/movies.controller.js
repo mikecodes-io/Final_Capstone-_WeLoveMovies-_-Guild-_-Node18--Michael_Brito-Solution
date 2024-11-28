@@ -1,20 +1,37 @@
 const service = require("./movies.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+
 async function movieExists(request, response, next) {
   // TODO: Add your code here.
-
-  next({});
+  service
+    .read(request.params.movie_id)
+    .then((movie) => {
+      if (movie) {
+        response.locals.movie = movie;
+        return next();
+      } next({ status: 404, message: 'Movie cannot be found.'})
+    })
+    .catch(next);
 }
 
-async function read(request, response) {
-  // TODO: Add your code here
-  response.json({ data: "" });
+async function read(request, response, next) {
+  try {
+    const data = await service.read();
+    response.json({ data });
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function list(request, response) {
+async function list(request, response, next) {
   // TODO: Add your code here.
-  response.json({ });
+  try {
+    const data = await service.list()
+    response.json({ data });
+  } catch (error) {
+    next(error)
+  }
 }
 
 module.exports = {
