@@ -15,6 +15,9 @@ router.route("/:movieId")
     .all(methodNotAllowed)
 
 router.route("/:movieId/theaters")
-    .get(controller.theatersRouter.list)
+    .get(controller.list)
+
+router.route("/:movieId/reviews")
+    .get(controller.list)
 
 module.exports = router;
