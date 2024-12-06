@@ -18,10 +18,17 @@ async function list(is_showing) {
 }
 
 async function read(movie_id) {
-  // TODO: Add your code here
-  return db("movies")
+  // Fetch a movie by its movie_id
+  const movie = await db("movies")
     .select("*")
-    .where({ movie_id }.first())
+    .where({ movie_id })
+    .first(); // Only retrieve the first result since movie_id should be unique
+
+  if (!movie) {
+    throw new Error(`Movie with ID ${movie_id} not found.`);
+  }
+
+  return movie;
 }
 
 module.exports = {

@@ -11,14 +11,23 @@ const reduceMovies = reduceProperties("theater_id", {
 });
 
 async function list() {
-  return db("theaters")
-    .join(
-      "movies_theaters",
-      "movies_theaters.theater_id",
-      "theaters.theater_id"
-    )
-    .join("movies", "movies.movie_id", "movies_theaters.movie_id")
-    .then(reduceMovies);
+  try {
+    // Perform the database query and join the necessary tables
+    const theaters = await db("theaters")
+      .join(
+        "movies_theaters",
+        "movies_theaters.theater_id",
+        "theaters.theater_id"
+      )
+      .join("movies", "movies.movie_id", "movies_theaters.movie_id")
+      .then(reduceMovies);
+
+    return theaters; // Return the result
+  } catch (error) {
+    // Log the error or handle it appropriately
+    console.error("Error fetching theaters: ", error);
+    throw new Error("Unable to fetch theaters");
+  }
 }
 
 module.exports = {

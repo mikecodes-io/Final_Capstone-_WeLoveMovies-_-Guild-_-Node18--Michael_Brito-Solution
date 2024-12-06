@@ -1,13 +1,16 @@
 const service = require("./theaters.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-async function list(request, response, next) {
-  // TODO: Add your code here
+async function list(request, response) {
   try {
-    const data = await service.list()
-    response.json({ data })
+    // Fetch all theaters from the service
+    const theaters = await service.list();
+
+    // Send the theaters data back in the response
+    response.json({ data: theaters });
   } catch (error) {
-    next (error)
+    // Handle any errors
+    next(error);
   }
 }
 
