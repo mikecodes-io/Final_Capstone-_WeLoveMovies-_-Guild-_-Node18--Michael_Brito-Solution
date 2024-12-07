@@ -3,19 +3,20 @@ const db = require("../db/connection");
 const tableName = "reviews";
 
 async function destroy(reviewId) {
-  // Deletes a review from the database by its ID
-  const deletedReview = await db(tableName)
-    .where({ review_id: reviewId })
-    .del()
-    .returning("*");
-  
-  // If no review is found and deleted, throw an error
-  if (!deletedReview.length) {
-    throw new Error(`Review with id ${reviewId} not found`);
+  // Fetch the review first
+  const review = await db("reviews").where({ review_id: reviewId }).first();
+
+  // If no review is found, throw an error
+  if (!review) {
+    throw new Error(`cannot be found.`);
   }
 
-  return deletedReview[0];
+  // Delete the review
+  await db("reviews").where({ review_id: reviewId }).del();
+
+  return review; // Optionally return the deleted review if needed
 }
+
 
 async function list(movie_id) {
   // Retrieves all reviews for a specific movie
@@ -40,7 +41,7 @@ async function read(reviewId) {
 
   // If no review is found, throw an error
   if (!review) {
-    throw new Error(`Review with id ${reviewId} not found`);
+    throw new Error(`cannot be found`);
   }
 
   // Set the critic data for the review
