@@ -63,7 +63,7 @@ async function update(review) {
   // Updates an existing review in the database
   return db(tableName)
     .where({ review_id: review.review_id })
-    .update(review, "*")
+    .update(review)
     .then(() => read(review.review_id))  // Fetch the updated review
     .then(setCritic);  // Add the critic information to the updated review
 }

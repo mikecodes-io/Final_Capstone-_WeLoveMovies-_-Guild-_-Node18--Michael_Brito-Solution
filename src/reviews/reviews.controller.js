@@ -35,7 +35,7 @@ async function destroy(request, response, next) {
 async function list(request, response, next) {
   try {
     const { movieId } = request.params;
-    const reviews = await service.listReviewsForMovie(movieId);
+    const reviews = await service.list(movieId);
     response.json({ data: reviews });
   } catch (error) {
     next(error); // Pass the error to the error handler
@@ -69,14 +69,13 @@ async function update(request, response, next) {
       });
     }
 
-    const updatedReview = await service.update({ ...review, ...request.body });
+    const updatedReview = await service.update({ review_id: review.review_id, ...request.body.data });
     return response.json({ data: updatedReview });
     
   } catch (error) {
     next(error);
   }
 }
-
 
 
 module.exports = {
