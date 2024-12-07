@@ -4,7 +4,7 @@ const methodNotAllowed = require("../errors/methodNotAllowed");
 
 // TODO: Add your routes here
 // Route to get reviews for a specific movie
-router.get("/:movieId/reviews", controller.list);
+router.get("/", controller.list);
 
 // Route to update a review
 router.put("/:reviewId", controller.update);

@@ -24,14 +24,20 @@ async function read(request, response) {
   response.json({ data: response.locals.movie });
 }
 
-async function list(request, response) {
+async function list(request, response, next) {
+  const { is_showing } = request.query;
+
+  // Ensure is_showing is a boolean or undefined if not passed
+  const isShowing = is_showing === 'true'; // Convert string 'true' to boolean
+
   try {
-    const movies = await service.list(); // Get all movies using the service layer
-    response.json({ data: movies }); // Send the list of movies as the response
+    const movies = await service.list(isShowing);
+    response.json({ data: movies });
   } catch (error) {
-    return next(error); // Pass any errors to the error handler
+    next(error); // Pass the error to the error handler
   }
 }
+
 
 module.exports = {
   list: [asyncErrorBoundary(list)], // Wrap the list function with asyncErrorBoundary
